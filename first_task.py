@@ -207,16 +207,22 @@ df_suppliers_from_text = pd.get_dummies(df_suppliers_from_text, columns=['Servic
 # select top 10 customers by total order value
 top_customers = customer_order_values.nlargest(10, "total_order_value_customer")
 
+top_customers_sorted = top_customers.sort_values(by="total_order_value_customer", ascending=False)
+top_customers_sorted["customer_id_str"] = top_customers_sorted["customer_id"].astype(str)
+
 fig = px.bar(
-    top_customers,
-    x="customer_id",
+    top_customers_sorted,
+    x="customer_id_str",
     y="total_order_value_customer",
     title="Top 10 Most Valuable Customers",
-    labels={"customer_id": "Customer ID", "total_order_value_customer": "Total Order Value"},
+    labels={"customer_id_str": "Customer ID", "total_order_value_customer": "Total Order Value"},
     text_auto=True
 )
 
-fig.show()
+fig.write_image("top_10_customers.png", scale=6)
+
+# uncomment this for displaying the bar chart
+# fig.show()
 
 # best suppliers analysis
 # total sum delays per supplier
@@ -245,3 +251,16 @@ print("")
 print("")
 print("")
 print(best_suppliers[:10])
+
+output_text = (
+    "\n\n\n"
+    "List of the top 10 suppliers by following metrics:\n"
+    "Least delays in total\n"
+    "Number of customers\n"
+    "Total orders sum\n"
+    "\n\n\n"
+    + best_suppliers[:10].to_string(index=False)
+)
+
+with open("top_10_suppliers.txt", "w") as f:
+    f.write(output_text)

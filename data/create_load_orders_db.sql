@@ -29,7 +29,7 @@ create table stg_table (
 	customer_rating numeric);
 
 copy stg_table
-from '/data/2021-11-03_HDCE3_orders_dataset.csv' 
+from '/home/daniil/project/spanflug_test_tasks/data/2021-11-03_HDCE3_orders_dataset.csv' 
 delimiter ';' 
 csv header;
 

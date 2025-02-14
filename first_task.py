@@ -79,6 +79,9 @@ df_suppliers_from_text = parse_suppliers_file(FILE_PATH)
 
 ### Reading data from SQL ###
 
+### I had to do it with SQLite, because firstly I didn't have postgresql instances
+### on my personal laptop, but when I saw the second task I installed it later anyway
+
 def load_data(db_file, csv_file):
     
     conn = sqlite3.connect(db_file)
@@ -146,6 +149,11 @@ def load_data(db_file, csv_file):
 
 df_orders, df_customers, df_suppliers = load_data(DB_FILE, CSV_FILE)
 
+
+# From this moment begins not really gut structured code
+# if I had more time, I would do it differently and I would make it more readable
+# But 4 hours not enough for it
+
 #######################
 ### Small data cleansing
 # drop duplicates
@@ -155,6 +163,7 @@ df_orders['customer_rating'].fillna(0, inplace=True)
 
 ################
 ### New features
+## I had many ideas for future, also I should have joined it with main tables, but I hope it's OK
 ## delays
 df_orders['requested_delivery_date'] = pd.to_datetime(df_orders['requested_delivery_date'], errors='coerce')
 df_orders['actual_delivery_date'] = pd.to_datetime(df_orders['actual_delivery_date'], errors='coerce')
@@ -221,9 +230,12 @@ fig = px.bar(
 
 fig.write_image("top_10_customers.png", scale=6)
 
+#
 # uncomment this for displaying the bar chart
 # fig.show()
+#
 
+# here I also had many ideas, but not really enough time to implement it all
 # best suppliers analysis
 # total sum delays per supplier
 supplier_delays = df_orders.groupby("supplier_id")["order_delay_days"].sum().reset_index()
